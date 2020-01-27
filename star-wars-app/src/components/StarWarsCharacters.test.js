@@ -1,6 +1,9 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
+import { getData as mockGetData } from '../api';
 import StarWarsCharacters from './StarWarsCharacters';
+
+jest.mock('../api');
 
 test('Renders StarWarsCharacters\' previous/next buttons', () => {
     // AAA Arrange, Act, Assert
@@ -8,11 +11,8 @@ test('Renders StarWarsCharacters\' previous/next buttons', () => {
     const previousButton = getByText(/Previous/i);
     const nextButton = getByText(/Next/i);
 
-    fireEvent.change(previousButton);
-    fireEvent.change(nextButton);
-})
+    fireEvent.click(previousButton);
+    fireEvent.click(nextButton);
 
-// test('Previous & Next buttons fire the new call of characters from the API', () => {
-//     render(<StarWarsCharacters />);
-//     fireEvent.change()
-// })
+    expect(mockGetData).toHaveBeenCalledTimes(1);
+})
