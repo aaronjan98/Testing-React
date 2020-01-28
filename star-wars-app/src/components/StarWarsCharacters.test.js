@@ -1,8 +1,24 @@
 import React from 'react';
-import { render, fireEvent, wait } from '@testing-library/react';
+import { render, fireEvent, wait, cleanup } from '@testing-library/react';
 import { getData as mockGetData } from '../api';
 import StarWarsCharacters from './StarWarsCharacters';
 
+// afterEach(cleanup);
+
+
+
+test('Renders StarWarsCharacters\' previous/next buttons', () => {
+    // AAA Arrange, Act, Assert
+    const { getByText } = render(<StarWarsCharacters />);
+    const previousButton = getByText(/Previous/i);
+    const nextButton = getByText(/Next/i);
+
+    fireEvent.click(previousButton);
+    fireEvent.click(nextButton);
+
+    // expect(mockGetData).toHaveBeenCalledTimes(1);
+    // wait(() => expect(mockGetData).toHaveBeenCalledTimes(1));
+})
 jest.mock('../api');
 
 const fakeData = {
@@ -14,22 +30,14 @@ const fakeData = {
     ]
 }
 
-// test('Renders StarWarsCharacters\' previous/next buttons', () => {
-//     // AAA Arrange, Act, Assert
-//     const { getByText } = render(<StarWarsCharacters />);
-//     const previousButton = getByText(/Previous/i);
-//     const nextButton = getByText(/Next/i);
-
-//     fireEvent.click(previousButton);
-//     fireEvent.click(nextButton);
-
-//     // expect(mockGetData).toHaveBeenCalledTimes(1)
-//     // wait(() => expect(mockGetData).toHaveBeenCalledTimes(1));
-// })
-
+mockGetData.mockResolvedValue(fakeData);
 test('api works', async () => {
-    mockGetData.mockResolvedValue(fakeData);
     const { getByText } = render(<StarWarsCharacters />);
+    // const previousButton = await getByText(/Previous/i);
+    // const nextButton = await getByText(/Next/i);
+
+    // fireEvent.click(previousButton);
+    // fireEvent.click(nextButton);
 
     await wait(() => expect(getByText(/bob/i)));
     getByText(/Bob/i);
